@@ -1,0 +1,23 @@
+{
+  "name": "LeetNet - Your LeetCode Social Hub",
+  "description": "An extension to view the activity of your friends on LeetCode.",
+  "version": "1.0",
+  "manifest_version": 3,
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": "icon128.png"
+  },
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://leetcode.com/*"
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "19": "icon19.png",
+    "32": "icon32.png",
+    "38": "icon38.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+  
+}
