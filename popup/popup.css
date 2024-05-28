@@ -1,0 +1,340 @@
+/* || Color scheme styles */
+:root {
+  --primary-color: #313131;
+  --secondary-color: #1A1A1A;
+  --font-color: #FFF;
+  --bg-color: #1E1E1E;
+  --heading-color: #FFF;
+  --toggle-bg-color: #FFF;
+  --toggle-circle-color: #282C34;
+  --inactive-tab-color: #A9A9A9;
+  --active-tab-line-color: #FFF;
+  --item-bg-color: #2c2c2e;
+  --diff-color-easy: #28a745;
+  --diff-color-medium: #ffc107;
+  --diff-color-hard: #dc3545;
+  --timestamp-color: #8e8e93;
+  --link-color: lightskyblue; 
+}
+
+[data-theme="light"] {
+  --primary-color: #F0F0F0;
+  --secondary-color: #FFF;
+  --font-color: #000;
+  --bg-color: #FFF;
+  --heading-color: #292922;
+  --toggle-bg-color: #000;
+  --toggle-circle-color: #FFF;
+  --inactive-tab-color: #7F7F7F;
+  --active-tab-line-color: #000;
+  --item-bg-color: #e4e4eb;
+  --diff-color-easy: #28a745; /* Green for easy */
+  --diff-color-medium: #ffc107; /* Yellow for medium */
+  --diff-color-hard: #dc3545; /* Red for hard */
+  --timestamp-color: #6c757d; /* Grey for timestamp */
+  --link-color: blue;
+}
+
+/* Specific difficulty colors */
+.easy {
+    color: var(--diff-color-easy) !important;
+}
+
+.medium {
+    color: var(--diff-color-medium) !important;
+}
+
+.hard {
+    color: var(--diff-color-hard) !important;
+}
+
+/* || Main page styles */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica", "Arial", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--font-color);
+  transition: background-color 0.3s, color 0.3s;
+  min-width: 400px;
+  min-height: 500px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: var(--primary-color);
+}
+
+.title {
+  font-size: 18px;
+  color: var(--heading-color);
+  font-weight: 600;
+}
+
+.icon {
+  width: 34px;
+  height: 34px;
+}
+
+.content {
+  padding: 20px;
+  text-align: center;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+/* || Toggle styles */
+.toggle-container {
+  display: flex;
+  align-items: center;
+}
+
+#mode-toggle {
+  display: none;
+}
+
+.toggle-label {
+  width: 40px;
+  height: 20px;
+  background-color: var(--toggle-bg-color);
+  border-radius: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle-label::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--toggle-circle-color);
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+#mode-toggle:checked + .toggle-label::after {
+  transform: translateX(20px);
+}
+
+/* || Tab bar styles */
+.tab-bar {
+  display: flex;
+  justify-content: center;
+  background-color: var(--primary-color);
+  border-bottom: 1px solid darkgray;
+
+}
+
+.tab {
+  background: none;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  color: var(--inactive-tab-color);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.tab:hover {
+  color: var(--font-color);
+}
+
+.tab.active {
+  color: var(--font-color);
+  border-bottom: 2px solid var(--active-tab-line-color);
+}
+
+/* || Friend page styles */
+#friend-username, #username {
+  /* Input box style */
+  display: inline-block;
+  box-sizing: border-box;
+  border: 1px solid var(--primary-color);
+  padding: 5px;
+  border-radius: 4px;
+  background-color: var(--primary-color);
+  color: var(--font-color);
+}
+
+#add-friend-btn {
+  background-color: #28a745;
+  border: none;
+  color: var(--font-color);
+  font-size: large;
+  /* font-weight: bold; */
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+#submit-username {
+  background-color: #28a745;
+  color: var(--font-color);
+  /* font-weight: bold; */
+  border: none;
+  text-align: center;
+  border-radius: 4px;
+  display: inline-block;
+  margin-left: 10px;
+  padding: 5px;
+}
+
+#add-friend-btn:hover, #submit-username:hover {
+  background-color: darkgreen;
+}
+
+.remove-btn {
+  background-color: var(--inactive-tab-color);
+  border: none;
+  color: black;
+  font-size: 14px;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+  border-radius: 4px;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.remove-btn:hover {
+  background-color:#6c757d;
+}
+
+.input-container {
+  display: flex;
+  margin: auto;
+  justify-content: center;
+}
+
+/* || Activity page styles */
+.submission-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.submission {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--item-bg-color);
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.submission-title,
+.submission-user {
+  margin: 0;
+  color: var(--font-color);
+}
+
+.submission-diff,
+.submission-timestamp {
+  margin: 0;
+  color: var(--font-color);
+}
+
+.submission-timestamp {
+  color: var(--timestamp-color);
+}
+
+.submission-title {
+  flex: 2;
+}
+
+.submission-user {
+  flex: 1;
+}
+
+.submission-diff {
+  flex: 1;
+  text-align: right;
+}
+
+.submission-timestamp {
+  flex: 1;
+  text-align: right;
+}
+
+.submission-link {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+.submission-link:hover {
+  text-decoration: underline;
+}
+
+/* || List styles */
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--item-bg-color);
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* || Leaderboard page styles */
+.profile-pic {
+  flex: 1;
+  text-align: left;
+  max-width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.stat-row-title {
+  flex: 1;
+  text-align: left;
+  padding-left: 10px;
+  font-size: 12px;
+}
+
+.stat-row-solved {
+  padding-right: 10px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.leaderboard-tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.leaderboard-tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  background-color: var(--bg-color);
+  color: var(--font-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.leaderboard-tab:hover,
+.leaderboard-tab.active {
+  background-color: var(--primary-color);
+  color: var(--background-color);
+}

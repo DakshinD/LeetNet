@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeetNet - Your LeetCode Social Hub</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="navbar">
+    <div class="title">LeetNet</div>
+    <div class="toggle-container">
+      <img src="../icon.png" class="icon"/>
+      <!-- <input type="checkbox" id="mode-toggle"> -->
+      <!-- <label for="mode-toggle" class="toggle-label"></label> -->
+    </div>
+  </div>
+  <div class="tab-bar">
+    <button id="activity-tab" class="tab">Activity</button>
+    <button id="friends-tab" class="tab">Friends</button>
+    <button id="leaderboard-tab" class="tab">Leaderboard</button>
+  </div>
+  <div class="content">
+    <div id="username-input" class="page">
+      <h2>Please enter your username:</h2>
+      <input type="text" id="username" placeholder="Username" autocomplete="username">
+      <button id="submit-username">Submit</button>
+    </div>
+
+    <div id="activity" class="page">
+      <h2>Activity</h2>
+      <div id="graphql-results"></div>
+    </div>
+
+    <div id="friends" class="page">
+      <div id="add-friend">
+        <h3>Add a Friend</h3>
+        <div class="input-container">
+          <input type="text" id="friend-username" placeholder="Input friend's username">
+          <button id="add-friend-btn">+</button>
+        </div>
+      </div>
+
+      <h3>Friends List</h3>
+      <div id="friends-list-container"></div>
+    </div>
+
+    <div id="leaderboard" class="page">
+      <h2>Leaderboard</h2>
+      <div class="leaderboard-tabs">
+        <button class="leaderboard-tab" data-difficulty="All">All</button>
+        <button class="leaderboard-tab easy" data-difficulty="Easy">Easy</button>
+        <button class="leaderboard-tab medium" data-difficulty="Medium">Medium</button>
+        <button class="leaderboard-tab hard" data-difficulty="Hard">Hard</button>
+      </div>
+      <div id="leaderboard-results"></div>
+      <!-- <p>Problems Solved</p>
+      <div id="all-problems-board"></div> -->
+    </div>
+  </div>
+  <script type="module" src="helper.js"></script>
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
