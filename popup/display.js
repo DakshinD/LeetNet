@@ -55,13 +55,19 @@ export function displayFriendsList(friends) {
  * Displays the leaderboard.
  * @param {Array} leaderboardStats - The leaderboard statistics.
  * @param {string} username - The current username.
- * @param {number} diff - The difficulty level (0: All, 1: Easy, 2: Medium, 3: Hard).
+ * @param {number} diff - The difficulty level (0: All, 1: Easy, 2: Medium, 3: Hard, 4: Daily).
+ *                         4 (Daily) is a special case, not a difficulty.
  */
-export function displayLeaderboard(leaderboardStats, username, diff) {
+export function displayLeaderboard(leaderboardStats, dailyStats, username, diff) {
+  // choose between default leaderboard stats or daily stats
+  if (diff === 4) leaderboardStats = dailyStats;
   // sort by problems solved
-  leaderboardStats.sort(function(x, y) {
-    return y.acSubmissionNum[diff].count - x.acSubmissionNum[diff].count;
-  })
+  if (diff !== 4) {
+    leaderboardStats.sort(function(x, y) {
+      return y.acSubmissionNum[diff].count - x.acSubmissionNum[diff].count;
+    })
+  }
+  
 
   // create container
   const resultsContainer = document.getElementById('leaderboard-results');
@@ -73,13 +79,13 @@ export function displayLeaderboard(leaderboardStats, username, diff) {
   }
 
   // Fetch all profile pics
-  const newLeaderboardStats = leaderboardStats.map(async (stat) => {
-    const userData = await getUserProfilePic(stat.username);
-    const avatar = userData.userAvatar;
-    return { ...stat, avatar };
-  });
+  // const newLeaderboardStats = leaderboardStats.map(async (stat) => {
+  //   const userData = await getUserProfilePic(stat.username);
+  //   const avatar = userData.userAvatar;
+  //   return { ...stat, avatar };
+  // });
 
-  Promise.all(newLeaderboardStats).then((leaderboardStats) => {
+  Promise.all(leaderboardStats).then((leaderboardStats) => {
     // create each list element
     const list = document.createElement('ul');
     list.classList.add('all-problems-list');
@@ -100,9 +106,10 @@ export function displayLeaderboard(leaderboardStats, username, diff) {
       title.textContent = `${idx+1}. ${stat.username}`;
 
       // number of problems solved
+      const problemsSolved = (diff === 4) ? stat.count : stat.acSubmissionNum[diff].count;
       const solved = document.createElement('p');
       solved.classList.add('stat-row-solved');
-      solved.textContent = `${stat.acSubmissionNum[diff].count}`;
+      solved.textContent = `${problemsSolved}`;
 
       listItem.appendChild(avatar);
       listItem.appendChild(title);

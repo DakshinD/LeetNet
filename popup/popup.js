@@ -15,7 +15,7 @@ import { displayFriendsList, displayLeaderboard, displayACSubmissions } from './
 document.getElementById('submit-username').addEventListener('click', async () => {
   const username = document.getElementById('username').value;
   // check if the username is valid by calling getUserProfilePic
-  const userData = await getUserProfilePic(friendUsername);
+  const userData = await getUserProfilePic(username);
 
   if (username) {
     if (userData === null) {
@@ -28,21 +28,37 @@ document.getElementById('submit-username').addEventListener('click', async () =>
         showPage('activity');
 
         // display leaderboard for first time, repeat code since DOM update already happened
-        let leaderboardData = await getUserProblemStats(username);
+        // Load in daily leaderboard data
+        const dailyData = await loadDailyLeaderboardData([], username);
+        let leaderboardData = [await getUserProblemStats(username)];
         console.log(leaderboardData)
-        const leaderboardTabs = document.querySelectorAll('.leaderboard-tab');
-        leaderboardTabs.forEach(tab => {
-          tab.addEventListener('click', () => {
-            leaderboardTabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            let difficulty = tab.getAttribute('data-difficulty');
-            const diffMap = {"All": 0, "Easy": 1, "Medium": 2, "Hard": 3};
-            displayLeaderboard([leaderboardData], username, diffMap[difficulty]);
-          });
+
+
+        // Fetch all profile pics
+        leaderboardData = leaderboardData.map(async (stat) => {
+          const userData = await getUserProfilePic(stat.username);
+          const avatar = userData.userAvatar;
+          return { ...stat, avatar };
         });
-        const defaultTab = document.querySelector('.leaderboard-tab[data-difficulty="All"]');
-        defaultTab.classList.add('active');
-        displayLeaderboard([leaderboardData], username, 0);
+
+        const leaderboardTabs = document.querySelectorAll('.leaderboard-tab');
+        Promise.all(leaderboardData).then((friendData) => {
+          leaderboardTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+              // once tab is clicked, change active and display new leaderboard data
+              leaderboardTabs.forEach(t => t.classList.remove('active'));
+              tab.classList.add('active');
+              let difficulty = tab.getAttribute('data-difficulty');
+              const diffMap = {"All": 0, "Easy": 1, "Medium": 2, "Hard": 3, "Daily": 4};
+              displayLeaderboard(friendData, dailyData, username, diffMap[difficulty]);
+            });
+          });
+          // load default tab as All for leaderboard
+          const defaultTab = document.querySelector('.leaderboard-tab[data-difficulty="All"]');
+          defaultTab.classList.add('active');
+          displayLeaderboard(friendData, null, username, 0);
+        })
+
       });
     }
   } else {
@@ -94,30 +110,116 @@ document.addEventListener('DOMContentLoaded', function() {
               // default to activity page
               showPage('activity');
 
+              // Load in daily leaderboard data
+              const dailyData = await loadDailyLeaderboardData(result.friends, currUsername);
+              console.log(dailyData);
               // Load in friend leaderboard data
               let leaderboardData = await getUserProblemStats(currUsername);
               Promise.all(result.friends.map(friend => getUserProblemStats(friend))).then((friendData) => {
+                // fetch profile pics for each user
+                
+                // for each tab listen for click
                 const leaderboardTabs = document.querySelectorAll('.leaderboard-tab');
                 friendData.push(leaderboardData);
-                leaderboardTabs.forEach(tab => {
-                  tab.addEventListener('click', () => {
-                    leaderboardTabs.forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    let difficulty = tab.getAttribute('data-difficulty');
-                    const diffMap = {"All": 0, "Easy": 1, "Medium": 2, "Hard": 3};
-                    displayLeaderboard(friendData, currUsername, diffMap[difficulty]);
-                  });
+
+                // Fetch all profile pics
+                friendData = friendData.map(async (stat) => {
+                  const userData = await getUserProfilePic(stat.username);
+                  const avatar = userData.userAvatar;
+                  return { ...stat, avatar };
                 });
-                // load default tab as All for leaderboard
-                const defaultTab = document.querySelector('.leaderboard-tab[data-difficulty="All"]');
-                defaultTab.classList.add('active');
-                displayLeaderboard(friendData, currUsername, 0);
-              
+
+                Promise.all(friendData).then((friendData) => {
+                  leaderboardTabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                      // once tab is clicked, change active and display new leaderboard data
+                      leaderboardTabs.forEach(t => t.classList.remove('active'));
+                      tab.classList.add('active');
+                      let difficulty = tab.getAttribute('data-difficulty');
+                      const diffMap = {"All": 0, "Easy": 1, "Medium": 2, "Hard": 3, "Daily": 4};
+                      displayLeaderboard(friendData, dailyData, currUsername, diffMap[difficulty]);
+                    });
+                  });
+                  // load default tab as All for leaderboard
+                  const defaultTab = document.querySelector('.leaderboard-tab[data-difficulty="All"]');
+                  defaultTab.classList.add('active');
+                  displayLeaderboard(friendData, null, currUsername, 0);
+                })
+                
               });
+
             });
         }
     });
 });
+
+
+/**
+ * Loads daily leaderboard data for the current user and their friends.
+ * Retrieves recent submissions for the current user and their friends,
+ * filters them to include only today's submissions, and sorts the users
+ * based on the count of their submissions.
+ * @param {string[]} friends - An array of usernames representing the friends of the current user.
+ * @param {string} username - The username of the current user.
+ * @returns {object[]} -An array of user objects containing daily leaderboard data.
+ */
+async function loadDailyLeaderboardData(friends, username) {
+  let allSubmissions = [];
+  
+  // Get personal data
+  const personalData = await getACSubmissions(username, 20);
+  allSubmissions.push({
+    username: username,
+    submissions: personalData
+  });
+
+  // Fetch past 20 submissions for each friend
+  const friendDataPromises = friends.map(async friend => {
+    const submissions = await getACSubmissions(friend, 20);
+    const currFriend = submissions.length > 0 ? submissions[0].username : "No Name";
+    return {
+      username: currFriend,
+      submissions: submissions
+    };
+  });
+
+  // Wait for all friend data promises to resolve
+  const friendData = await Promise.all(friendDataPromises);
+  allSubmissions = allSubmissions.concat(friendData);
+
+  // Fetch profile pics for all users
+  const allSubmissionsWithAvatarPromises = allSubmissions.map(async (stat) => {
+    const userData = await getUserProfilePic(stat.username);
+    const avatar = userData.userAvatar;
+    return { ...stat, avatar };
+  });
+
+  // Wait for all profile pic promises to resolve
+  const allSubmissionsWithAvatar = await Promise.all(allSubmissionsWithAvatarPromises);
+
+  // Now filter all submissions for each user
+  allSubmissionsWithAvatar.forEach((user) => {
+    user.submissions = user.submissions.filter(submission => isToday(submission.timestamp));
+    user.count = user.submissions.length;
+  });
+
+  // Sort the submissions
+  allSubmissionsWithAvatar.sort((x, y) => y.count - x.count);
+
+  return allSubmissionsWithAvatar;
+}
+
+
+/**
+ *  Helper function to filter submissions from today
+ */ 
+function isToday(timestamp) {
+    const today = new Date();
+    const date = new Date(timestamp * 1000);
+    return date.getDate() === today.getDate() &&
+           date.getMonth() === today.getMonth() &&
+           date.getFullYear() === today.getFullYear();
+}
 
 
 /**
