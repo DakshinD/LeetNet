@@ -99,6 +99,16 @@ export function displayLeaderboard(leaderboardStats, dailyStats, username, diff)
     leaderboardStats.forEach( (stat, idx) => {
       const listItem = document.createElement('li');
       listItem.classList.add('stat-row');
+      
+      // Medal icon based on rank
+      let medalIcon = '';
+      if (idx === 0) {
+        medalIcon = '<img src="../assets/gold-medal.png" alt="Gold Medal" class="medal-icon">';
+      } else if (idx === 1) {
+        medalIcon = '<img src="../assets/silver-medal.png" alt="Silver Medal" class="medal-icon">';
+      } else if (idx === 2) {
+        medalIcon = '<img src="../assets/bronze-medal.png" alt="Bronze Medal" class="medal-icon">';
+      }
 
       // Avatar
       const avatar = document.createElement('img');
@@ -109,13 +119,13 @@ export function displayLeaderboard(leaderboardStats, dailyStats, username, diff)
       // Username
       const title = document.createElement('p');
       title.classList.add('stat-row-title');
-      title.textContent = `${idx+1}. ${stat.username}`;
+      title.innerHTML = `${idx+1}. ${stat.username}`;
 
       // number of problems solved
       const problemsSolved = (diff === 4) ? stat.count : stat.acSubmissionNum[diff].count;
       const solved = document.createElement('p');
       solved.classList.add('stat-row-solved');
-      solved.textContent = `${problemsSolved}`;
+      solved.innerHTML = `${medalIcon} ${problemsSolved}`;
 
       listItem.appendChild(avatar);
       listItem.appendChild(title);

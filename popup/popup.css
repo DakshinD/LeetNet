@@ -381,13 +381,15 @@ li {
   flex: 1;
   text-align: left;
   padding-left: 10px;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .stat-row-solved {
   padding-right: 10px;
   font-size: 16px;
   font-weight: 500;
+  color: var(--timestamp-color)
 }
 
 .leaderboard-tabs {
@@ -441,3 +443,9 @@ li {
   background-color: transparent;
 }
 
+.medal-icon {
+  width: 40px; /* Adjust size as needed */
+  height: 40px; /* Adjust size as needed */
+  margin-right: 5px; /* Space between medal and username */
+  vertical-align: middle; /* Align with text */
+}
