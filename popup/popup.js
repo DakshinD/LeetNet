@@ -1,7 +1,7 @@
 import getACSubmissions from '../GQLQueries/recentACSubmissions.js';
 import getUserProblemStats from '../GQLQueries/getUserProblemStats.js';
 import getUserProfilePic from '../GQLQueries/getUserProfilePic.js';
-import { displayFriendsList, displayLeaderboard, displayACSubmissions } from './display.js';
+import { displayFriendsList, displayLeaderboard, displayACSubmissions, displaySubmissionChart } from './display.js';
 
 
 /**
@@ -89,6 +89,9 @@ document.addEventListener('DOMContentLoaded', function() {
             showPage('username-input');
         } else {
             console.log('Welcome back, ' + result.username);
+            // Profile screen username
+            document.getElementById('profile-username').value = result.username; 
+
             // load in user AC data
             let allSubmissions = [];
             const data = await getACSubmissions(result.username, 5);
@@ -149,8 +152,26 @@ document.addEventListener('DOMContentLoaded', function() {
               });
 
             });
+
+            // display submission chart
+            displaySubmissionChart(result.username);
+
+            // Initialize the indicator position on page load
+            updateTabIndicator();
         }
     });
+});
+
+// Handle the username change on button click
+document.getElementById('profile-submit-btn').addEventListener('click', () => {
+  const newUsername = document.getElementById('profile-username').value; // Get the new username
+  console.log("here");
+  // Update local storage with the new username
+  chrome.storage.local.set({ username: newUsername }, () => {
+      console.log('Username updated to:', newUsername);
+      // Reload the extension to reflect the changes
+      location.reload(); // Reload the extension
+  });
 });
 
 
@@ -303,7 +324,7 @@ function updateTabIndicator() {
   }
 }
 
-// Initialize the indicator position on page load
-updateTabIndicator();
+
+
 
 

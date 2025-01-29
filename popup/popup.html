@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LeetNet - Your LeetCode Social Hub</title>
   <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="charts.min.css">
 </head>
 <body>
   <div class="navbar">
     <div class="title">LeetNet</div>
     <div class="toggle-container">
-      <img src="../icon.png" class="icon"/>
+      <img src="../assets/icon.png" class="icon"/>
       <!-- <input type="checkbox" id="mode-toggle"> -->
       <!-- <label for="mode-toggle" class="toggle-label"></label> -->
     </div>
@@ -19,6 +20,7 @@
     <button id="activity-tab" class="tab">Activity</button>
     <button id="friends-tab" class="tab">Friends</button>
     <button id="leaderboard-tab" class="tab">Leaderboard</button>
+    <button id="profile-tab" class="tab">Profile</button>
     <div class="tab-indicator"></div>
   </div>
   <div class="content">
@@ -59,6 +61,23 @@
  
       <!-- <p>Problems Solved</p>
       <div id="all-problems-board"></div> -->
+    </div>
+
+    <div id="profile" class="page">
+
+      <div id="edit-user-container" class="flex row">
+        <input type="text" id="profile-username" placeholder="Username">
+        <button id="profile-submit-btn">Submit</button>
+      </div>
+
+      <!-- Submission chart -->
+      <div class="flex" id="my-chart">
+        <h3>Weekly Submission Chart</h3>
+        <table class="charts-css column show-primary-axis show-labels data-spacing-5">
+          <tbody id="submissionTable">
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
   <script type="module" src="helper.js"></script>

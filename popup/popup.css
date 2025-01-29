@@ -183,7 +183,7 @@ body {
 }
 
 /* || Friend page styles */
-#friend-username, #username {
+#friend-username, #username, #profile-username {
   display: inline-block;
   box-sizing: border-box;
   border: 1px solid var(--primary-color);
@@ -235,7 +235,25 @@ body {
   transition: all 0.3s ease-in-out;
 }
 
-#add-friend-btn:hover, #submit-username:hover {
+#edit-user-container {
+  margin-bottom: 20px;
+}
+
+#profile-submit-btn {
+  background-color: #28a745;
+  border: none;
+  color: var(--font-color);
+  font-size: 12px;
+  /* font-weight: bold; */
+  padding: 5px 10px;
+  text-align: center;
+  border-radius: 10px;
+  display: inline-block;
+  margin-left: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+#add-friend-btn:hover, #submit-username:hover, #profile-submit-btn:hover {
   background: #1e7e34;
   transform: scale(1.1);
 }
@@ -377,17 +395,20 @@ li {
   border-radius: 50%;
 }
 
+.stat-row {
+  padding: 5px 10px;
+}
 .stat-row-title {
   flex: 1;
   text-align: left;
   padding-left: 10px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
 }
 
 .stat-row-solved {
   padding-right: 10px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--timestamp-color)
 }
@@ -449,3 +470,21 @@ li {
   margin-right: 5px; /* Space between medal and username */
   vertical-align: middle; /* Align with text */
 }
+
+#my-chart {
+  border-radius: 5px;
+  background-color: var(--item-bg-color);
+  padding: 5px 20px 20px;
+}
+
+#my-chart tbody th {
+  color: white;
+}
+
+#my-chart tbody td {
+  color: var(--font-color);
+
+  background-color: var(--diff-color-medium);
+}
+
+

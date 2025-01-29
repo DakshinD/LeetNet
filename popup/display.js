@@ -6,7 +6,7 @@
 import questionDifficulty from '../GQLQueries/questionDifficulty.js';
 import { timeDifference } from './helper.js';
 import getUserProfilePic from '../GQLQueries/getUserProfilePic.js';
-
+import getUserCalendar from '../GQLQueries/getUserCalendar.js';
 /**
  * Displays the friends list.
  * @param {Array} friends - The list of friends.
@@ -217,4 +217,90 @@ export async function displayACSubmissions(submissions, username) {
     resultsContainer.appendChild(list) 
   });
 
+}
+
+const formatDate = (timestamp) => {
+  const date = new Date(timestamp * 1000); // Convert to milliseconds
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`; // Format as YYYY-MM-DD
+};
+
+// Assuming getUserCalendar is defined and returns a promise
+export async function displaySubmissionChart(username) {
+  try {
+    const userCalendar = await getUserCalendar(username); // Call the function to get user calendar data
+    const submissionCalendarString = userCalendar.userCalendar.submissionCalendar; // Extract the submissionCalendar property
+    const submissionData = JSON.parse(submissionCalendarString); // Parse the JSON string
+    
+    const formattedSubmissionData = {};
+    for (const [timestamp, count] of Object.entries(submissionData)) {
+      const formattedDate = formatDate(Number(timestamp)); // Convert key to number and format
+      formattedSubmissionData[formattedDate] = count; // Assign the count to the new date key
+    }
+    console.log(formattedSubmissionData);
+    const getLastWeekData = (submissionData) => {
+      const today = new Date();
+      const lastWeekData = {};
+    
+      for (let i = 0; i < 7; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i); // Get the date for the past week
+    
+        // Format the date as "YYYY-MM-DD"
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+        const day = String(date.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`; // Format as YYYY-MM-DD
+    
+        // Check if the formatted date exists in submissionData
+        lastWeekData[formattedDate] = submissionData[formattedDate] || 0; // Default to 0 if no submissions
+      }
+    
+      return lastWeekData;
+    };
+    const lastWeekSubmissions = getLastWeekData(formattedSubmissionData);
+    console.log(lastWeekSubmissions);
+
+    // Create the bar chart
+    // const chartContainer = document.getElementById('chartContainer');
+    // chartContainer.innerHTML = ''; // Clear previous chart
+
+    const maxSubmissions = Math.max(...Object.values(lastWeekSubmissions)); // Get the maximum submissions for scaling
+
+    // Assuming lastWeekSubmissions is already defined and contains the submission data
+    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; // Array of day names
+
+    // Get the table body element
+    const submissionChartBody = document.getElementById('submissionTable');
+
+    // Clear previous data
+    submissionChartBody.innerHTML = '';
+
+    // Populate the table with submission data
+    Object.entries(lastWeekSubmissions).forEach(([formattedDate, count], index) => {
+      const dayName = dayNames[new Date(formattedDate).getDay()]; // Get the day name from the date
+
+      // Create a new row for each submission
+      const row = document.createElement('tr');
+
+      // Create label
+      const labelCell = document.createElement('th');
+      labelCell.setAttribute('scope', 'row'); 
+      labelCell.innerHTML = `${dayNames[new Date(formattedDate).getDay()]}`; // Set the submission count
+      row.appendChild(labelCell); 
+
+      // Create the submission cell with the appropriate size
+      const submissionCell = document.createElement('td');
+      submissionCell.style.setProperty('--size', (count / maxSubmissions)); // Set the size based on submissions
+      submissionCell.innerHTML = `${count}`; // Set the submission count
+      row.appendChild(submissionCell);
+
+      // Append the row to the table body
+      submissionChartBody.appendChild(row);
+    });
+  } catch (error) {
+    console.error('Error fetching user calendar:', error);
+  }
 }
