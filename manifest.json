@@ -21,7 +21,8 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["fonts/Inter.woff2"]
+      "resources": ["fonts/Inter.woff2"],
+      "matches": ["<all_urls>"]
     }
   ]
 }

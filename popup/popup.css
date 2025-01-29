@@ -196,7 +196,7 @@ body {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-#friend-username:focus, #username:focus {
+#friend-username:focus, #username:focus, #profile-username:focus-visible {
   border-color: #28a745;
   box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
   outline: none;
@@ -271,6 +271,7 @@ body {
   transition: all 0.3s ease-in-out;
 
 }
+
 
 
 .remove-btn {
@@ -483,8 +484,51 @@ li {
 
 #my-chart tbody td {
   color: var(--font-color);
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  background-color: #edb100;
+}
 
-  background-color: var(--diff-color-medium);
+#my-chart tbody td:hover {
+  background-color: #d39e00;
+}
+
+.loading-spinner {
+  display: none; /* Initially hidden */
+  width: 40px;
+  height: 40px;
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #edb100;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 120%; /* Positions above the icon */
+  left: 50%;
+  transform: translateX(-70%);
+  background-color: rgb(10, 132, 255, 0.5);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.solved-icon {
+  position: relative; /* Needed for proper tooltip positioning */
+  cursor: pointer;
 }
 
 

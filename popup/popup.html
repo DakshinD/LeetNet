@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="charts.min.css">
 </head>
 <body>
+
+  <!-- NAV BAR -->
   <div class="navbar">
     <div class="title">LeetNet</div>
     <div class="toggle-container">
@@ -16,6 +18,8 @@
       <!-- <label for="mode-toggle" class="toggle-label"></label> -->
     </div>
   </div>
+
+  <!-- TAB BAR -->
   <div class="tab-bar">
     <button id="activity-tab" class="tab">Activity</button>
     <button id="friends-tab" class="tab">Friends</button>
@@ -23,31 +27,42 @@
     <button id="profile-tab" class="tab">Profile</button>
     <div class="tab-indicator"></div>
   </div>
+
+  <!-- Main screen content-->
   <div class="content">
+
+    <!-- Username input on first open-->
     <div id="username-input" class="page">
       <h2>Please enter your username:</h2>
       <input type="text" id="username" placeholder="Username" autocomplete="username">
       <button id="submit-username">Submit</button>
     </div>
 
+    <!-- Activity page-->
     <div id="activity" class="page">
       <h2>Activity</h2>
+      <div class="loading-spinner"></div>
       <div id="graphql-results"></div>
     </div>
 
+    <!-- Friend list page-->
     <div id="friends" class="page">
+      <!-- Add text field-->
       <div id="add-friend">
         <h3>Add a Friend</h3>
         <div class="input-container">
-          <input type="text" id="friend-username" placeholder="Input friend's username">
+          <input type="text" id="friend-username" placeholder="Input username">
           <button id="add-friend-btn">+</button>
         </div>
+        <div class="loading-spinner"></div>
       </div>
-
+      
+      <!-- Friends list-->
       <h3>Friends List</h3>
       <div id="friends-list-container"></div>
     </div>
 
+    <!-- Leaderboard page -->
     <div id="leaderboard" class="page">
       <h2>Leaderboard</h2>
       <div class="leaderboard-tabs">
@@ -57,29 +72,32 @@
         <button class="leaderboard-tab hard" data-difficulty="Hard">Hard</button>
         <button class="leaderboard-tab" data-difficulty="All">All</button>
       </div>
+      <div class="loading-spinner"></div>
       <div id="leaderboard-results"></div>
- 
-      <!-- <p>Problems Solved</p>
-      <div id="all-problems-board"></div> -->
     </div>
 
+    <!-- Profile page-->
     <div id="profile" class="page">
-
+      <!-- Edit username text field-->
       <div id="edit-user-container" class="flex row">
         <input type="text" id="profile-username" placeholder="Username">
         <button id="profile-submit-btn">Submit</button>
       </div>
+
 
       <!-- Submission chart -->
       <div class="flex" id="my-chart">
         <h3>Weekly Submission Chart</h3>
         <table class="charts-css column show-primary-axis show-labels data-spacing-5">
           <tbody id="submissionTable">
+            <div class="loading-spinner"></div>
           </tbody>
         </table>
       </div>
     </div>
+
   </div>
+
   <script type="module" src="helper.js"></script>
   <script type="module" src="popup.js"></script>
 </body>
