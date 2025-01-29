@@ -203,6 +203,8 @@ async function loadDailyLeaderboardData(friends, username) {
     user.count = user.submissions.length;
   });
 
+  // TODO: If one user has solved 20 problems today, should we request more?
+
   // Sort the submissions
   allSubmissionsWithAvatar.sort((x, y) => y.count - x.count);
 
@@ -256,32 +258,52 @@ document.getElementById('add-friend-btn').addEventListener('click', async () => 
   }
 });
 
-
-
 /**
  * Listener for tab changes
  */
-document.getElementById('activity-tab').addEventListener('click', () => showPage('activity'));
-document.getElementById('friends-tab').addEventListener('click', () => showPage('friends'));
-document.getElementById('leaderboard-tab').addEventListener('click', () => showPage('leaderboard'));
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const pageId = tab.id.replace('-tab', ''); // Derive the page ID from the tab ID
+    showPage(pageId);
+  });
+});
 
 /**
  * Changes which page is shown as content based off tab bar.
  * @param {String} pageId - The id of the page chosen.
  */
 function showPage(pageId) {
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-    });
-    
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-    });
+  // Remove active class from all tabs and pages
+  tabs.forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
 
-    document.getElementById(pageId).classList.add('active');
-    const activeTabId = (pageId === 'username-input') ? null : `${pageId.concat('-tab')}`;
-    if (activeTabId) {
-        document.getElementById(activeTabId).classList.add('active');
-    } 
+  // Add active class to the selected tab and page
+  const selectedTab = document.getElementById(`${pageId}-tab`);
+  const selectedPage = document.getElementById(pageId);
+
+  if (selectedTab) selectedTab.classList.add('active');
+  if (selectedPage) selectedPage.classList.add('active');
+
+  // Update the tab indicator position and size
+  updateTabIndicator();
 }
+
+/**
+ * Updates the position and size of the tab indicator based on the active tab.
+ */
+function updateTabIndicator() {
+  const tabIndicator = document.querySelector('.tab-indicator');
+  const activeTab = document.querySelector('.tab.active');
+
+  if (tabIndicator && activeTab) {
+    const { offsetLeft, offsetWidth } = activeTab;
+    tabIndicator.style.left = `${offsetLeft}px`;
+    tabIndicator.style.width = `${offsetWidth}px`;
+  }
+}
+
+// Initialize the indicator position on page load
+updateTabIndicator();
+
 

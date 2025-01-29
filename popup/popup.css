@@ -1,3 +1,17 @@
+/* @font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  src: url(../fonts/Inter.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+} */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  src: url(../fonts/Inter.woff2) format('woff2');
+}
+
 /* || Color scheme styles */
 :root {
   --primary-color: #313131;
@@ -54,7 +68,7 @@
 
 /* || Main page styles */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica", "Arial", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
   background-color: var(--bg-color);
@@ -132,11 +146,11 @@ body {
 
 /* || Tab bar styles */
 .tab-bar {
+  position: relative;
   display: flex;
   justify-content: center;
   background-color: var(--primary-color);
   border-bottom: 1px solid darkgray;
-
 }
 
 .tab {
@@ -147,6 +161,7 @@ body {
   color: var(--inactive-tab-color);
   font-size: 16px;
   font-weight: 500;
+  position: relative;
 }
 
 .tab:hover {
@@ -155,20 +170,55 @@ body {
 
 .tab.active {
   color: var(--font-color);
-  border-bottom: 2px solid var(--active-tab-line-color);
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100px; /* Default width */
+  background-color: var(--active-tab-line-color);
+  transition: all 0.3s ease; /* Smooth animation */
 }
 
 /* || Friend page styles */
 #friend-username, #username {
-  /* Input box style */
   display: inline-block;
   box-sizing: border-box;
   border: 1px solid var(--primary-color);
-  padding: 5px;
-  border-radius: 4px;
+  padding: 8px 12px;
+  border-radius: 6px;
   background-color: var(--primary-color);
   color: var(--font-color);
+  font-size: 12px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+#friend-username:focus, #username:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+  outline: none;
+}
+
+.friends-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.friends-list li {
+  color: white;
+  padding: 12px 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  transition: all 0.3s ease-in-out;
+}
+
 
 #add-friend-btn {
   background-color: #28a745;
@@ -182,6 +232,12 @@ body {
   border-radius: 50%;
   display: inline-block;
   margin-left: 10px;
+  transition: all 0.3s ease-in-out;
+}
+
+#add-friend-btn:hover, #submit-username:hover {
+  background: #1e7e34;
+  transform: scale(1.1);
 }
 
 #submit-username {
@@ -194,28 +250,41 @@ body {
   display: inline-block;
   margin-left: 10px;
   padding: 5px;
+  transition: all 0.3s ease-in-out;
+
 }
 
-#add-friend-btn:hover, #submit-username:hover {
-  background-color: darkgreen;
-}
 
 .remove-btn {
-  background-color: var(--inactive-tab-color);
+  background-color: transparent;
   border: none;
-  color: black;
-  font-size: 14px;
-  height: 20px;
-  width: 20px;
-  text-align: center;
-  border-radius: 4px;
-  display: inline-block;
-  margin-left: 10px;
+  color: white;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
 }
 
 .remove-btn:hover {
-  background-color:#6c757d;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.1);
 }
+
+.remove-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: #ccc;
+  transition: stroke 0.3s ease-in-out;
+}
+
+.remove-btn:hover svg {
+  stroke: #ff4d4d;
+}
+
 
 .input-container {
   display: flex;
@@ -328,17 +397,47 @@ li {
 }
 
 .leaderboard-tab {
-  padding: 10px 20px;
+  background: none;
+  border: none;
+  /* padding: 10px 20px; */
   cursor: pointer;
-  background-color: var(--bg-color);
-  color: var(--font-color);
-  border: 1px solid var(--primary-color);
-  border-radius: 5px;
-  transition: background-color 0.3s, color 0.3s;
+  color: var(--inactive-tab-color);
+  font-size: 16px;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s, transform 0.3s;
 }
 
-.leaderboard-tab:hover,
 .leaderboard-tab.active {
-  background-color: var(--primary-color);
-  color: var(--background-color);
+  color: var(--font-color);
 }
+
+.leaderboard-tab:hover {
+  color: var(--font-color);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.leaderboard-tab::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 3px;
+  background-color: var(--active-tab-line-color);
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.leaderboard-tab.active::after {
+  width: 100%;
+  left: 0;
+}
+.leaderboard-tab {
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin: 0 5px;
+  background-color: transparent;
+}
+
